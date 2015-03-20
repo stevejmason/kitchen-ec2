@@ -30,6 +30,7 @@ module Kitchen
     # @author Fletcher Nichol <fnichol@nichol.ca>
     class Ec2 < Kitchen::Driver::SSHBase
 
+      default_config :use_iam_profile,    false
       default_config :region,             'us-east-1'
       default_config :availability_zone,  'us-east-1b'
       default_config :flavor_id,          'm1.small'
@@ -161,8 +162,9 @@ module Kitchen
       def connection
         Fog::Compute.new(
           :provider               => :aws,
-          :aws_access_key_id      => config[:aws_access_key_id],
-          :aws_secret_access_key  => config[:aws_secret_access_key],
+          :use_iam_profile        => config[:use_iam_profile]       if     config[:use_iam_profile]
+          :aws_access_key_id      => config[:aws_access_key_id]     unless config[:use_iam_profile],
+          :aws_secret_access_key  => config[:aws_secret_access_key] unless config[:use_iam_profile],
           :aws_session_token      => config[:aws_session_token],
           :region                 => config[:region],
           :endpoint               => config[:endpoint],
