@@ -160,15 +160,23 @@ module Kitchen
       private
 
       def connection
-        Fog::Compute.new(
+        opts =
+        {
           :provider               => :aws,
-          :use_iam_profile        => config[:use_iam_profile]       if     config[:use_iam_profile]
-          :aws_access_key_id      => config[:aws_access_key_id]     unless config[:use_iam_profile],
-          :aws_secret_access_key  => config[:aws_secret_access_key] unless config[:use_iam_profile],
-          :aws_session_token      => config[:aws_session_token],
           :region                 => config[:region],
           :endpoint               => config[:endpoint],
-        )
+        }
+
+        # Conditionally use iam profile or access key options
+        if config[:use_iam_profile]
+          opts[:use_iam_profile]        = config[:use_iam_profile]
+        else
+          opts[:aws_access_key_id]      = config[:aws_access_key_id]]
+          opts[:aws_secret_access_key]  = config[:aws_secret_access_key]
+          opts[:aws_session_token]      = config[:aws_session_token]
+        end
+
+        Fog::Compute.new(opts)
       end
 
       def create_server
