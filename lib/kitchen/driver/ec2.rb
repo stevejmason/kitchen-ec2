@@ -171,7 +171,7 @@ module Kitchen
         if config[:use_iam_profile]
           opts[:use_iam_profile]        = config[:use_iam_profile]
         else
-          opts[:aws_access_key_id]      = config[:aws_access_key_id]]
+          opts[:aws_access_key_id]      = config[:aws_access_key_id]
           opts[:aws_secret_access_key]  = config[:aws_secret_access_key]
           opts[:aws_session_token]      = config[:aws_session_token]
         end
